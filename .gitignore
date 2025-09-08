@@ -1,0 +1,12 @@
+# Node.js dependencies
+/node_modules/
+
+# Build output (produktion)
+/build/
+
+# Miljövariabler (miljöfiler med hemligheter)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
