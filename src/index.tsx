@@ -5,8 +5,23 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
     palette: {
-        primary: { main: '#4caf50' }, // grön
-        secondary: { main: '#ffc107' } // gul
+        primary: {
+            main: '#6CAF69'
+        },
+        secondary: {
+            main: '#F4A261'
+        },
+        background: {
+            default: '#F6F1E7',
+            paper: '#FFFFFF'
+        },
+        text: {
+            primary: '#37474F',
+            secondary: '#90AFC5'
+        },
+        warning: {
+            main: '#FFE066'
+        }
     }
 });
 

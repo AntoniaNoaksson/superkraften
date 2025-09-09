@@ -1,0 +1,62 @@
+/* CalendarStyles.css */
+
+/* Grundläggande styling */
+.react-calendar {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border: none;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    line-height: 1.5em;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+/* Dagar */
+.react-calendar__tile {
+    padding: 0.5em;
+    background: #e3f2fd;
+    color: #1976d2;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.react-calendar__tile:enabled:hover {
+    background: #bbdefb;
+    cursor: pointer;
+}
+
+/* Markerad dag */
+.react-calendar__tile--active {
+    background: #1976d2;
+    color: white;
+}
+
+/* Dagens datum */
+.react-calendar__tile--now {
+    background: #ffecb3;
+    color: #f57c00;
+    font-weight: bold;
+}
+
+/* Veckodagar */
+.react-calendar__month-view__weekdays {
+    text-align: center;
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+}
+
+/* Responsiv */
+@media (max-width: 600px) {
+    .react-calendar {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .react-calendar__tile {
+        padding: 0.3em;
+    }
+}
