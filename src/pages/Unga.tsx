@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Box,
     Paper,
@@ -12,8 +12,7 @@ import {
     FormControlLabel,
     LinearProgress,
     Snackbar,
-    IconButton,
-    Divider
+    IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -70,140 +69,243 @@ export default function Unga() {
         setOpenSnackbar(true);
     };
 
+    const scrollToId = (id: string) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    const menuItems = [
+        { id: 'uppgifter', label: 'Dagens uppgifter' },
+        { id: 'kalender', label: 'Din kalender' },
+        { id: 'tips', label: 'Tips och råd' },
+        { id: 'forum', label: 'Forum – prata med andra' },
+        { id: 'pepp', label: 'Dagens pepp' }
+    ];
+
     return (
         <Box
             sx={{
                 display: 'flex',
-                justifyContent: 'center',
-                mt: 6,
-                px: 2,
-                fontFamily: "'Comic Sans MS', cursive, sans-serif",
-                flexDirection: 'column',
                 gap: 4,
-                maxWidth: 700,
-                margin: '0 auto'
+                maxWidth: '100%',
+                px: 2,
+                mt: 6,
+                justifyContent: 'center',
+                fontFamily: "'Comic Sans MS', cursive, sans-serif"
             }}
         >
-            {/* Uppgiftslista */}
-            <Paper
-                elevation={4}
+            {/* Sidebar */}
+            <Box
+                component="nav"
                 sx={{
-                    p: { xs: 2, sm: 4 },
-                    borderRadius: 3,
-                    backgroundColor: '#f0f8ff'
+                    minWidth: 220,
+                    position: 'sticky',
+                    top: 16,
+                    alignSelf: 'flex-start',
+                    borderRight: '1px solid #ddd',
+                    pr: 2,
+                    display: { xs: 'none', sm: 'block' }
                 }}
+                aria-label="Innehållsförteckning"
             >
-                <Typography variant="h3" gutterBottom sx={{ color: '#1976d2' }}>
-                    Hej superkraft!
-                </Typography>
-                <Typography variant="body1" sx={{ mb: 3 }}>
-                    Här kan du hålla koll på dina uppgifter och mål. Lägg till
-                    nya saker att göra och bocka av när du är klar! 💫
-                </Typography>
-
                 <Typography variant="h6" gutterBottom>
-                    Dagens uppgifter
+                    Innehållsförteckning
                 </Typography>
                 <List>
-                    {tasks.map((task) => (
+                    {menuItems.map(({ id, label }) => (
                         <ListItem
-                            key={task.id}
-                            disablePadding
-                            sx={{
-                                mb: 1,
-                                borderLeft:
-                                    task.priority === 'high'
-                                        ? '5px solid #d32f2f'
-                                        : '5px solid #1976d2',
-                                borderRadius: 1,
-                                backgroundColor: task.done ? '#dcedc8' : '#fff'
-                            }}
+                            button
+                            key={id}
+                            onClick={() => scrollToId(id)}
+                            sx={{ cursor: 'pointer', py: 0.5 }}
                         >
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={task.done}
-                                        onChange={() => toggleDone(task.id)}
-                                    />
-                                }
-                                label={<ListItemText primary={task.text} />}
-                            />
+                            <ListItemText primary={label} />
                         </ListItem>
                     ))}
                 </List>
+            </Box>
 
-                <Box
+            {/* Main content */}
+            <Box
+                sx={{
+                    width: '100%',
+                    maxWidth: 700,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 4
+                }}
+            >
+                <Paper
+                    elevation={4}
                     sx={{
-                        display: 'flex',
-                        gap: 1,
-                        mt: 2,
-                        flexWrap: 'wrap',
-                        alignItems: 'center'
+                        p: { xs: 2, sm: 4 },
+                        borderRadius: 3,
+                        backgroundColor: '#f0f8ff'
                     }}
                 >
-                    <TextField
-                        fullWidth
-                        size="small"
-                        variant="outlined"
-                        placeholder="Lägg till ny uppgift"
-                        value={newTask}
-                        onChange={(e) => setNewTask(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') addTask();
-                        }}
-                    />
-                    <Button
-                        variant={
-                            newPriority === 'normal' ? 'outlined' : 'contained'
-                        }
-                        color="primary"
-                        onClick={() => setNewPriority('normal')}
+                    <Typography
+                        variant="h3"
+                        gutterBottom
+                        sx={{ color: '#1976d2' }}
                     >
-                        Normal
-                    </Button>
-                    <Button
-                        variant={
-                            newPriority === 'high' ? 'contained' : 'outlined'
-                        }
-                        color="error"
-                        onClick={() => setNewPriority('high')}
-                    >
-                        Viktig!
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={addTask}
-                        sx={{ whiteSpace: 'nowrap' }}
-                    >
-                        Lägg till
-                    </Button>
-                </Box>
+                        Hej superkraft!
+                    </Typography>
+                    <Typography variant="body1" sx={{ mb: 3 }}>
+                        Här kan du hålla koll på dina uppgifter och mål. Lägg
+                        till nya saker att göra och bocka av när du är klar! 💫
+                    </Typography>
 
-                <Typography variant="h6" sx={{ mt: 4 }}>
-                    Framsteg
-                </Typography>
-                <LinearProgress
-                    variant="determinate"
-                    value={progress}
-                    sx={{ height: 10, borderRadius: 5 }}
-                />
-                <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mt: 1 }}
-                >
-                    Du har klarat {doneCount} av {tasks.length} uppgifter
-                </Typography>
+                    {/* Uppgifter */}
+                    <Box id="uppgifter">
+                        <Typography variant="h6" gutterBottom>
+                            Dagens uppgifter
+                        </Typography>
+                        <List>
+                            {tasks.map((task) => (
+                                <ListItem
+                                    key={task.id}
+                                    disablePadding
+                                    sx={{
+                                        mb: 1,
+                                        borderLeft:
+                                            task.priority === 'high'
+                                                ? '5px solid #d32f2f'
+                                                : '5px solid #1976d2',
+                                        borderRadius: 1,
+                                        backgroundColor: task.done
+                                            ? '#dcedc8'
+                                            : '#fff'
+                                    }}
+                                >
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={task.done}
+                                                onChange={() =>
+                                                    toggleDone(task.id)
+                                                }
+                                            />
+                                        }
+                                        label={
+                                            <ListItemText primary={task.text} />
+                                        }
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
 
-                <Typography variant="h6" sx={{ mt: 4, mb: 1 }}>
-                    Dagens pepp
-                </Typography>
-                <Typography
-                    variant="body1"
-                    sx={{ fontStyle: 'italic', color: '#555' }}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                gap: 1,
+                                mt: 2,
+                                flexWrap: 'wrap',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                size="small"
+                                variant="outlined"
+                                placeholder="Lägg till ny uppgift"
+                                value={newTask}
+                                onChange={(e) => setNewTask(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') addTask();
+                                }}
+                            />
+                            <Button
+                                variant={
+                                    newPriority === 'normal'
+                                        ? 'outlined'
+                                        : 'contained'
+                                }
+                                color="primary"
+                                onClick={() => setNewPriority('normal')}
+                            >
+                                Normal
+                            </Button>
+                            <Button
+                                variant={
+                                    newPriority === 'high'
+                                        ? 'contained'
+                                        : 'outlined'
+                                }
+                                color="error"
+                                onClick={() => setNewPriority('high')}
+                            >
+                                Viktig!
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={addTask}
+                                sx={{ whiteSpace: 'nowrap' }}
+                            >
+                                Lägg till
+                            </Button>
+                        </Box>
+
+                        <Typography variant="h6" sx={{ mt: 4 }}>
+                            Framsteg
+                        </Typography>
+                        <LinearProgress
+                            variant="determinate"
+                            value={progress}
+                            sx={{ height: 10, borderRadius: 5 }}
+                        />
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ mt: 1 }}
+                        >
+                            Du har klarat {doneCount} av {tasks.length}{' '}
+                            uppgifter
+                        </Typography>
+                    </Box>
+                </Paper>
+
+                {/* Dagens pepp */}
+                <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }} id="pepp">
+                    <Typography variant="h6" gutterBottom>
+                        Dagens pepp
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{ fontStyle: 'italic', color: '#555' }}
+                    >
+                        {quote}
+                    </Typography>
+                </Paper>
+
+                {/* Kalender */}
+                <Paper
+                    elevation={3}
+                    sx={{ p: 3, borderRadius: 3 }}
+                    id="kalender"
                 >
-                    {quote}
-                </Typography>
+                    <Typography variant="h5" gutterBottom>
+                        Din kalender
+                    </Typography>
+                    <Calendar />
+                </Paper>
+
+                {/* Tips */}
+                <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }} id="tips">
+                    <Typography variant="h5" gutterBottom>
+                        Tips och råd
+                    </Typography>
+                    <Tips />
+                </Paper>
+
+                {/* Forum */}
+                <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }} id="forum">
+                    <Typography variant="h5" gutterBottom>
+                        Forum – prata med andra
+                    </Typography>
+                    <Forum />
+                </Paper>
 
                 <Snackbar
                     open={openSnackbar}
@@ -220,31 +322,7 @@ export default function Unga() {
                         </IconButton>
                     }
                 />
-            </Paper>
-
-            {/* Kalender */}
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-                <Typography variant="h5" gutterBottom>
-                    Din kalender
-                </Typography>
-                <Calendar />
-            </Paper>
-
-            {/* Tips */}
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-                <Typography variant="h5" gutterBottom>
-                    Tips och råd
-                </Typography>
-                <Tips />
-            </Paper>
-
-            {/* Forum */}
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-                <Typography variant="h5" gutterBottom>
-                    Forum – prata med andra
-                </Typography>
-                <Forum />
-            </Paper>
+            </Box>
         </Box>
     );
 }

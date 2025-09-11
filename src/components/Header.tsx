@@ -18,6 +18,9 @@ export default function Header() {
                 >
                     Vårdnadshavare
                 </Button>
+                <Button color="inherit" component={RouterLink} to="/skola">
+                    Skola / Förskola
+                </Button>
                 <Button color="inherit" component={RouterLink} to="/unga">
                     För unga
                 </Button>

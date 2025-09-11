@@ -18,13 +18,12 @@ type CalendarValue = Date | Date[] | null;
 
 export default function Calendar() {
     const [date, setDate] = useState<CalendarValue>(new Date());
-    // Events lagras som ett objekt där key är datum i yyyy-mm-dd format
+
     const [events, setEvents] = useState<Record<string, string>>({});
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [eventText, setEventText] = useState('');
 
-    // Formatera datum till yyyy-mm-dd
     const formatDateKey = (date: Date) => date.toISOString().split('T')[0];
 
     const handleChange = (value: CalendarValue) => {
@@ -35,7 +34,6 @@ export default function Calendar() {
         }
     };
 
-    // Klick på datum i kalendern
     const onDateClick = (date: Date) => {
         setSelectedDate(date);
         const key = formatDateKey(date);
@@ -43,7 +41,6 @@ export default function Calendar() {
         setOpenDialog(true);
     };
 
-    // Spara event
     const saveEvent = () => {
         if (!selectedDate) return;
         const key = formatDateKey(selectedDate);
@@ -51,7 +48,6 @@ export default function Calendar() {
         setOpenDialog(false);
     };
 
-    // Ta bort event
     const deleteEvent = () => {
         if (!selectedDate) return;
         const key = formatDateKey(selectedDate);
@@ -63,13 +59,11 @@ export default function Calendar() {
         setOpenDialog(false);
     };
 
-    // Visa events för valt datum
     const displayEventsForDate = (date: Date) => {
         const key = formatDateKey(date);
         return events[key];
     };
 
-    // Anpassa rendering av dagar för att visa markering om event finns
     const tileContent = ({ date, view }: { date: Date; view: string }) => {
         if (view === 'month') {
             const key = formatDateKey(date);
